@@ -1137,78 +1137,79 @@ class Game {
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
 
-    // =====================================
-// НОВЫЕ ПАТТЕРНЫ
-// ДОБАВЬ В defineWavePatterns()
-// =====================================
+defineWavePatterns() {
 
-centerBloom: {
+    this.patterns = {
 
-    health: 12,
-    points: 800,
+        centerBloom: {
 
-    update: (enemy) => {
+            health: 12,
+            points: 800,
 
-        if (!enemy.locked) {
+            update: (enemy) => {
 
-            enemy.locked = true;
-            enemy.y = 120;
-        }
+                if (!enemy.locked) {
+                    enemy.locked = true;
+                    enemy.y = 120;
+                }
 
-        if (enemy.timer % 40 === 0) {
+                if (enemy.timer % 40 === 0) {
 
-            for (let i = 0; i < 24; i++) {
+                    for (let i = 0; i < 24; i++) {
 
-                const angle =
-                    (Math.PI * 2 / 24) * i;
+                        const angle =
+                            (Math.PI * 2 / 24) * i;
 
-                const bullet = new Bullet(
-                    enemy.x,
-                    enemy.y,
-                    angle,
-                    2.2,
-                    true
-                );
+                        const bullet = new Bullet(
+                            enemy.x,
+                            enemy.y,
+                            angle,
+                            2.2,
+                            true
+                        );
 
-                bullet.width = 8;
-                bullet.height = 8;
-                bullet.color = '#ff3355';
+                        bullet.width = 8;
+                        bullet.height = 8;
+                        bullet.color = '#ff3355';
 
-                this.bullets.push(bullet);
+                        this.bullets.push(bullet);
+                    }
+                }
+            }
+        },
+
+        streamCenter: {
+
+            health: 8,
+            points: 500,
+
+            update: (enemy) => {
+
+                enemy.y += 0.45;
+
+                if (enemy.timer % 8 === 0) {
+
+                    for (let i = -2; i <= 2; i++) {
+
+                        const bullet = new Bullet(
+                            enemy.x,
+                            enemy.y,
+                            Math.PI / 2 + i * 0.1,
+                            3,
+                            true
+                        );
+
+                        bullet.width = 9;
+                        bullet.height = 9;
+
+                        this.bullets.push(bullet);
+                    }
+                }
             }
         }
-    }
-},
 
-streamCenter: {
-
-    health: 8,
-    points: 500,
-
-    update: (enemy) => {
-
-        enemy.y += 0.45;
-
-        if (enemy.timer % 8 === 0) {
-
-            for (let i = -2; i <= 2; i++) {
-
-                const bullet = new Bullet(
-                    enemy.x,
-                    enemy.y,
-                    Math.PI / 2 + i * 0.1,
-                    3,
-                    true
-                );
-
-                bullet.width = 9;
-                bullet.height = 9;
-
-                this.bullets.push(bullet);
-            }
-        }
-    }
-},
+    };
+}
 
     // =====================================
 // НОВЫЕ ВОЛНЫ ДЛЯ ОБУЧЕНИЯ ВЗГЛЯДУ В ЦЕНТР
