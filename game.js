@@ -1621,199 +1621,404 @@ buildWave(waveNumber) {
 
     const queue = [];
 
-    queue.push({
-    type:'mirrorNeedle',
-    enemyType:'needle',
-    x:90,
-    y:-20,
-    delay:0
-});
-
-queue.push({
-    type:'mirrorNeedle',
-    enemyType:'needle',
-    x:310,
-    y:-20,
-    delay:0
-});
-
-    queue.push({
-
-    type:'eliteCoffin',
-
-    enemyType:'coffin',
-
-    x:200,
-    y:-80,
-
-    delay:0
-});
-
-    queue.push({
-
-    type: 'orbitDisc',
-    enemyType: 'disc',
-
-    x: 200,
-    y: 180,
-
-    delay: 0
-});
-
-    queue.push({
-
-    type: 'spiralFlower',
-    enemyType: 'flower',
-
-    x: 200,
-    y: 80,
-
-    delay: 0
-});
+    let t = 0;
 
     // =====================================
-    // WAVE 1 — CENTRAL PRESSURE
-    // мягкое обучение чтению центра
+    // WAVE 1
+    // BASIC CENTER READING
     // =====================================
 
     if (waveNumber === 1) {
 
         queue.push({
-            type: 'centerBloom',
-            x: 200,
-            y: -20,
-            delay: 0
+            type:'streamCenter',
+            enemyType:'needle',
+            x:200,
+            y:-40,
+            delay:t
+        });
+
+        t += 80;
+
+        queue.push({
+            type:'streamCenter',
+            enemyType:'needle',
+            x:120,
+            y:-40,
+            delay:t
+        });
+
+        t += 60;
+
+        queue.push({
+            type:'streamCenter',
+            enemyType:'needle',
+            x:280,
+            y:-40,
+            delay:t
+        });
+
+        t += 120;
+
+        queue.push({
+            type:'centerBloom',
+            enemyType:'flower',
+            x:200,
+            y:90,
+            delay:t
+        });
+
+        t += 180;
+
+        queue.push({
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:90,
+            y:-20,
+            delay:t
         });
 
         queue.push({
-            type: 'streamLeft',
-            x: 110,
-            y: -40,
-            delay: 120
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:310,
+            y:-20,
+            delay:t
         });
 
-        queue.push({
-            type: 'streamRight',
-            x: 290,
-            y: -40,
-            delay: 180
-        });
+        t += 240;
     }
 
     // =====================================
-    // WAVE 2 — SIDE TRAPS
-    // заставляет смотреть в центр заранее
+    // WAVE 2
+    // MIRROR PRESSURE
     // =====================================
 
     else if (waveNumber === 2) {
 
         queue.push({
-            type: 'wallLeft',
-            x: 40,
-            y: -40,
-            delay: 0
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:100,
+            y:-20,
+            delay:t
         });
 
         queue.push({
-            type: 'wallRight',
-            x: 360,
-            y: -40,
-            delay: 100
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:300,
+            y:-20,
+            delay:t
         });
 
+        t += 120;
+
         queue.push({
-            type: 'centerBloom',
-            x: 200,
-            y: 90,
-            delay: 220
+            type:'streamCenter',
+            enemyType:'needle',
+            x:200,
+            y:-20,
+            delay:t
         });
+
+        t += 120;
+
+        queue.push({
+            type:'orbitDisc',
+            enemyType:'disc',
+            x:200,
+            y:140,
+            delay:t
+        });
+
+        t += 220;
+
+        queue.push({
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:80,
+            y:-20,
+            delay:t
+        });
+
+        t += 40;
+
+        queue.push({
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:320,
+            y:-20,
+            delay:t
+        });
+
+        t += 180;
+
+        queue.push({
+            type:'centerBloom',
+            enemyType:'flower',
+            x:200,
+            y:110,
+            delay:t
+        });
+
+        t += 240;
     }
 
     // =====================================
-    // WAVE 3 — CROSS REACTION
+    // WAVE 3
+    // MEMORY + SPIRALS
     // =====================================
 
     else if (waveNumber === 3) {
 
-        for (let i = 0; i < 2; i++) {
+        queue.push({
+            type:'spiralFlower',
+            enemyType:'flower',
+            x:120,
+            y:80,
+            delay:t
+        });
 
-            queue.push({
-                type: 'crossShooter',
-                x: 110 + i * 180,
-                y: -40,
-                delay: i * 80
-            });
-        }
+        t += 90;
 
         queue.push({
-            type: 'streamCenter',
-            x: 200,
-            y: -20,
-            delay: 220
+            type:'spiralFlower',
+            enemyType:'flower',
+            x:280,
+            y:80,
+            delay:t
         });
+
+        t += 150;
+
+        queue.push({
+            type:'orbitDisc',
+            enemyType:'disc',
+            x:200,
+            y:140,
+            delay:t
+        });
+
+        t += 180;
+
+        queue.push({
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:70,
+            y:-20,
+            delay:t
+        });
+
+        queue.push({
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:330,
+            y:-20,
+            delay:t
+        });
+
+        t += 150;
+
+        queue.push({
+            type:'streamCenter',
+            enemyType:'needle',
+            x:200,
+            y:-20,
+            delay:t
+        });
+
+        t += 220;
+
+        queue.push({
+            type:'centerBloom',
+            enemyType:'flower',
+            x:200,
+            y:100,
+            delay:t
+        });
+
+        t += 240;
     }
 
     // =====================================
-    // WAVE 4 — MEMORY WALL
+    // WAVE 4
+    // ELITE CONTROL
     // =====================================
 
     else if (waveNumber === 4) {
 
         queue.push({
-            type: 'rotator',
-            x: 200,
-            y: 110,
-            delay: 0
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:90,
+            y:-20,
+            delay:t
         });
 
         queue.push({
-            type: 'wallLeft',
-            x: 30,
-            y: -20,
-            delay: 150
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:310,
+            y:-20,
+            delay:t
+        });
+
+        t += 100;
+
+        queue.push({
+            type:'orbitDisc',
+            enemyType:'disc',
+            x:140,
+            y:130,
+            delay:t
+        });
+
+        t += 80;
+
+        queue.push({
+            type:'orbitDisc',
+            enemyType:'disc',
+            x:260,
+            y:130,
+            delay:t
+        });
+
+        t += 220;
+
+        queue.push({
+            type:'eliteCoffin',
+            enemyType:'coffin',
+            x:200,
+            y:-80,
+            delay:t
+        });
+
+        t += 320;
+
+        queue.push({
+            type:'spiralFlower',
+            enemyType:'flower',
+            x:100,
+            y:60,
+            delay:t
         });
 
         queue.push({
-            type: 'wallRight',
-            x: 370,
-            y: -20,
-            delay: 240
+            type:'spiralFlower',
+            enemyType:'flower',
+            x:300,
+            y:60,
+            delay:t
         });
+
+        t += 260;
     }
 
     // =====================================
-    // WAVE 5 — SCREEN CONTROL
+    // WAVE 5
+    // FINAL PRESSURE BEFORE MIDBOSS
     // =====================================
 
     else if (waveNumber === 5) {
 
         queue.push({
-            type: 'centerBloom',
-            x: 200,
-            y: 100,
-            delay: 0
+            type:'centerBloom',
+            enemyType:'flower',
+            x:200,
+            y:100,
+            delay:t
+        });
+
+        t += 120;
+
+        queue.push({
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:70,
+            y:-20,
+            delay:t
         });
 
         queue.push({
-            type: 'rotator',
-            x: 200,
-            y: 130,
-            delay: 160
+            type:'mirrorNeedle',
+            enemyType:'needle',
+            x:330,
+            y:-20,
+            delay:t
         });
 
-        queue.push({
-            type: 'streamLeft',
-            x: 100,
-            y: -20,
-            delay: 260
-        });
+        t += 120;
 
         queue.push({
-            type: 'streamRight',
-            x: 300,
-            y: -20,
-            delay: 320
+            type:'orbitDisc',
+            enemyType:'disc',
+            x:200,
+            y:140,
+            delay:t
         });
+
+        t += 160;
+
+        queue.push({
+            type:'spiralFlower',
+            enemyType:'flower',
+            x:120,
+            y:70,
+            delay:t
+        });
+
+        t += 50;
+
+        queue.push({
+            type:'spiralFlower',
+            enemyType:'flower',
+            x:280,
+            y:70,
+            delay:t
+        });
+
+        t += 180;
+
+        queue.push({
+            type:'eliteCoffin',
+            enemyType:'coffin',
+            x:200,
+            y:-80,
+            delay:t
+        });
+
+        t += 240;
+
+        queue.push({
+            type:'streamCenter',
+            enemyType:'needle',
+            x:120,
+            y:-20,
+            delay:t
+        });
+
+        t += 40;
+
+        queue.push({
+            type:'streamCenter',
+            enemyType:'needle',
+            x:280,
+            y:-20,
+            delay:t
+        });
+
+        t += 60;
+
+        queue.push({
+            type:'streamCenter',
+            enemyType:'needle',
+            x:200,
+            y:-20,
+            delay:t
+        });
+
+        t += 260;
     }
 
     return queue;
