@@ -1640,25 +1640,6 @@ buildWave(waveNumber) {
 
         t += 80;
 
-        queue.push({
-            type:'streamCenter',
-            enemyType:'needle',
-            x:120,
-            y:-40,
-            delay:t
-        });
-
-        t += 60;
-
-        queue.push({
-            type:'streamCenter',
-            enemyType:'needle',
-            x:280,
-            y:-40,
-            delay:t
-        });
-
-        t += 120;
 
         queue.push({
             type:'centerBloom',
@@ -1714,15 +1695,6 @@ buildWave(waveNumber) {
 
         t += 120;
 
-        queue.push({
-            type:'streamCenter',
-            enemyType:'needle',
-            x:200,
-            y:-20,
-            delay:t
-        });
-
-        t += 120;
 
         queue.push({
             type:'orbitDisc',
@@ -1791,16 +1763,6 @@ buildWave(waveNumber) {
         });
 
         t += 150;
-
-        queue.push({
-            type:'orbitDisc',
-            enemyType:'disc',
-            x:200,
-            y:140,
-            delay:t
-        });
-
-        t += 180;
 
         queue.push({
             type:'mirrorNeedle',
