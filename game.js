@@ -724,7 +724,7 @@ class Boss {
 
     if (m.hp <= 0) continue;
 
-    if (this.timer % 40 === 0) {
+    if (this.phase >= 2 && this.timer % 90 === 0) {
 
         const angle = Math.atan2(
             this.game.player.y - (this.y + m.y),
@@ -785,51 +785,51 @@ class Boss {
     }
 
 
-        // =========================================
-// PHASE 1 — CENTER CONTROL
-// =========================================
-
 if (this.phase === 1) {
 
     // =====================================
-    // CENTRAL FAN
+    // PHASE 1 = TEACHING PHASE
     // =====================================
 
-    if (this.timer % 32 === 0) {
+    // -----------------------------
+    // WIDE FAN
+    // -----------------------------
 
-        for (let i = -4; i <= 4; i++) {
+    if (this.timer % 55 === 0) {
+
+        for (let i = -3; i <= 3; i++) {
 
             const bullet = new Bullet(
                 this.x,
                 this.y,
-                Math.PI / 2 + i * 0.09,
+                Math.PI / 2 + i * 0.13,
                 2,
                 true
             );
 
-            bullet.width = 10;
-            bullet.height = 10;
+            bullet.width = 12;
+            bullet.height = 12;
 
             this.game.bullets.push(bullet);
         }
     }
 
-    // =====================================
-    // SLOW ROTATING RINGS
-    // =====================================
+    // -----------------------------
+    // SLOW RING
+    // -----------------------------
 
-    if (this.timer % 70 === 0) {
+    if (this.timer % 120 === 0) {
 
         const base =
-            this.timer * 0.05;
+            this.timer * 0.02;
 
-        for (let i = 0; i < 18; i++) {
+        for (let i = 0; i < 12; i++) {
 
             const bullet = new Bullet(
                 this.x,
                 this.y,
-                base + (Math.PI * 2 / 18) * i,
-                1.8,
+                base + (Math.PI * 2 / 12) * i,
+                1.5,
                 true
             );
 
@@ -840,37 +840,37 @@ if (this.phase === 1) {
         }
     }
 
-    // =====================================
-    // SIDE CURTAINS
-    // =====================================
+    // -----------------------------
+    // LIGHT SIDE CURTAINS
+    // -----------------------------
 
-    if (this.timer % 120 === 0) {
+    if (this.timer % 180 === 0) {
 
-        for (let y = 100; y <= 500; y += 60) {
+        for (let y = 140; y <= 460; y += 90) {
 
             const left = new Bullet(
                 -10,
                 y,
-                0.15,
-                2.5,
+                0.08,
+                2,
                 true
             );
 
-            left.width = 12;
-            left.height = 12;
+            left.width = 10;
+            left.height = 10;
 
             this.game.bullets.push(left);
 
             const right = new Bullet(
                 410,
                 y,
-                Math.PI - 0.15,
-                2.5,
+                Math.PI - 0.08,
+                2,
                 true
             );
 
-            right.width = 12;
-            right.height = 12;
+            right.width = 10;
+            right.height = 10;
 
             this.game.bullets.push(right);
         }
