@@ -291,6 +291,7 @@ class Enemy {
         this.maxHealth = this.health;
         this.points = pattern.points || 100;
         this.type = type || 'needle';
+        this.elite = pattern.elite || false;
     }
 
     update() {
@@ -687,6 +688,22 @@ hit(damage = 1) {
 // ---------- Класс босса ----------
 class Boss {
     constructor(x, y, game) {
+
+        this.modules = [
+    {
+        x:-70,
+        y:20,
+        hp:30,
+        side:'left'
+    },
+
+    {
+        x:70,
+        y:20,
+        hp:30,
+        side:'right'
+    }
+];
         this.x = x;
         this.y = y;
         this.game = game;
@@ -702,6 +719,32 @@ class Boss {
     }
 
     update() {
+
+        for (const m of this.modules) {
+
+    if (m.hp <= 0) continue;
+
+    if (this.timer % 40 === 0) {
+
+        const angle = Math.atan2(
+            this.game.player.y - (this.y + m.y),
+            this.game.player.x - (this.x + m.x)
+        );
+
+        const bullet = new Bullet(
+            this.x + m.x,
+            this.y + m.y,
+            angle,
+            4,
+            true
+        );
+
+        bullet.width = 14;
+        bullet.height = 14;
+
+        this.game.bullets.push(bullet);
+    }
+}
     this.timer++;
 
     // Вход босса
@@ -893,6 +936,43 @@ if (this.phase === 3) {
 }
 
     draw(ctx) {
+
+        for (const m of this.modules) {
+
+    if (m.hp <= 0) continue;
+
+    ctx.fillStyle = '#080808';
+
+    ctx.fillRect(
+        m.x - 18,
+        m.y - 18,
+        36,
+        36
+    );
+
+    ctx.strokeStyle = '#d9d9d9';
+
+    ctx.strokeRect(
+        m.x - 18,
+        m.y - 18,
+        36,
+        36
+    );
+
+    ctx.fillStyle = '#ff0023';
+
+    ctx.beginPath();
+
+    ctx.arc(
+        m.x,
+        m.y,
+        6,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+}
 
     ctx.save();
 
@@ -1187,9 +1267,25 @@ if (this.phase === 3) {
 }
 }
 
+class MidBoss extends Boss {
+
+    constructor(x,y,game){
+
+        super(x,y,game);
+
+        this.maxHealth = 120;
+        this.health = 120;
+
+        this.points = 5000;
+
+        this.targetY = 120;
+    }
+}
+
 // ---------- Главный класс игры ----------
 class Game {
     constructor() {
+        this.midboss = null;
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = 400;
@@ -1263,6 +1359,187 @@ class Game {
 defineWavePatterns() {
 
     this.patterns = {
+
+        mirrorNeedle: {
+
+    health: 7,
+    points: 500,
+
+    update: (enemy) => {
+
+        enemy.y += 0.4;
+
+        if (enemy.timer % 24 === 0) {
+
+            const dir =
+                enemy.x < 200 ? 1 : -1;
+
+            for (let i = 0; i < 5; i++) {
+
+                const bullet = new Bullet(
+                    enemy.x,
+                    enemy.y,
+                    Math.PI/2 + dir * i * 0.12,
+                    3,
+                    true
+                );
+
+                bullet.width = 8;
+                bullet.height = 8;
+
+                this.bullets.push(bullet);
+            }
+        }
+    }
+},
+
+        eliteCoffin: {
+
+    health: 60,
+    points: 4000,
+
+    elite: true,
+
+    update: (enemy) => {
+
+        if (!enemy.locked) {
+
+            enemy.y += 0.5;
+
+            if (enemy.y >= 120) {
+
+                enemy.y = 120;
+
+                enemy.locked = true;
+            }
+        }
+
+        if (enemy.timer % 6 === 0) {
+
+            const base =
+                enemy.timer * 0.05;
+
+            for (let i = 0; i < 3; i++) {
+
+                const bullet = new Bullet(
+                    enemy.x,
+                    enemy.y,
+                    base + i * (Math.PI*2/3),
+                    2.6,
+                    true
+                );
+
+                bullet.width = 10;
+                bullet.height = 10;
+
+                this.bullets.push(bullet);
+            }
+        }
+
+        if (enemy.timer % 90 === 0) {
+
+            const angle = Math.atan2(
+                this.player.y - enemy.y,
+                this.player.x - enemy.x
+            );
+
+            const bullet = new Bullet(
+                enemy.x,
+                enemy.y,
+                angle,
+                5,
+                true
+            );
+
+            bullet.width = 18;
+            bullet.height = 18;
+
+            this.bullets.push(bullet);
+        }
+    }
+},
+
+        orbitDisc: {
+
+    health: 10,
+    points: 700,
+
+    update: (enemy) => {
+
+        if (!enemy.init) {
+
+            enemy.init = true;
+
+            enemy.centerX = enemy.x;
+            enemy.centerY = enemy.y;
+
+            enemy.radius = 90;
+        }
+
+        const a = enemy.timer * 0.03;
+
+        enemy.x =
+            enemy.centerX +
+            Math.cos(a) * enemy.radius;
+
+        enemy.y =
+            enemy.centerY +
+            Math.sin(a) * 40;
+
+        if (enemy.timer % 35 === 0) {
+
+            for (let i = 0; i < 12; i++) {
+
+                const bullet = new Bullet(
+                    enemy.x,
+                    enemy.y,
+                    (Math.PI*2/12)*i,
+                    2,
+                    true
+                );
+
+                bullet.width = 7;
+                bullet.height = 7;
+
+                this.bullets.push(bullet);
+            }
+        }
+    }
+},
+
+        spiralFlower: {
+
+    health: 16,
+    points: 1200,
+
+    update: (enemy) => {
+
+        enemy.y += 0.15;
+
+        if (enemy.timer % 3 === 0) {
+
+            const base =
+                enemy.timer * 0.09;
+
+            for (let i = 0; i < 2; i++) {
+
+                const bullet = new Bullet(
+                    enemy.x,
+                    enemy.y,
+                    base + Math.PI * i,
+                    2.4,
+                    true
+                );
+
+                bullet.width = 8;
+                bullet.height = 8;
+                bullet.color = '#ff0023';
+
+                this.bullets.push(bullet);
+            }
+        }
+    }
+},
 
         centerBloom: {
 
@@ -1343,6 +1620,56 @@ defineWavePatterns() {
 buildWave(waveNumber) {
 
     const queue = [];
+
+    queue.push({
+    type:'mirrorNeedle',
+    enemyType:'needle',
+    x:90,
+    y:-20,
+    delay:0
+});
+
+queue.push({
+    type:'mirrorNeedle',
+    enemyType:'needle',
+    x:310,
+    y:-20,
+    delay:0
+});
+
+    queue.push({
+
+    type:'eliteCoffin',
+
+    enemyType:'coffin',
+
+    x:200,
+    y:-80,
+
+    delay:0
+});
+
+    queue.push({
+
+    type: 'orbitDisc',
+    enemyType: 'disc',
+
+    x: 200,
+    y: 180,
+
+    delay: 0
+});
+
+    queue.push({
+
+    type: 'spiralFlower',
+    enemyType: 'flower',
+
+    x: 200,
+    y: 80,
+
+    delay: 0
+});
 
     // =====================================
     // WAVE 1 — CENTRAL PRESSURE
@@ -1496,6 +1823,18 @@ buildWave(waveNumber) {
     nextWave() {
         this.wave++;
         this.waveStep = 0;
+
+if (this.wave === 5 && !this.midboss) {
+
+    this.midboss = new MidBoss(
+        200,
+        -100,
+        this
+    );
+
+    return;
+}
+
         
         if (this.wave >= 10) {
             this.wave = 10;
@@ -1795,6 +2134,18 @@ if (this.laserMode) {
 }
         if (this.isMobile) this.player.update(this.mouseX, this.mouseY);
 
+if (this.midboss) {
+
+    this.midboss.update();
+
+    if (this.midboss.health <= 0) {
+
+        this.player.score += this.midboss.points;
+
+        this.midboss = null;
+    }
+}
+        
         if (this.boss) {
             this.boss.update();
             if (this.boss.health <= 0) {
