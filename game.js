@@ -881,19 +881,28 @@ if (this.phase === 1) {
 // PHASE 2 — MEMORY SPIRALS
 // =========================================
 
+// =========================================
+// PHASE 2 — MEMORY SPIRALS
+// =========================================
+
 if (this.phase === 2) {
 
-    if (this.timer % 5 === 0) {
+    // =====================================
+    // SOFT DOUBLE SPIRAL
+    // =====================================
 
-        const base = this.timer * 0.08;
+    if (this.timer % 9 === 0) {
 
-        for (let i = 0; i < 3; i++) {
+        const base =
+            this.timer * 0.045;
+
+        for (let i = 0; i < 2; i++) {
 
             const bullet = new Bullet(
                 this.x,
                 this.y,
-                base + i * (Math.PI * 2 / 3),
-                2.8,
+                base + i * Math.PI,
+                2.2,
                 true
             );
 
@@ -904,20 +913,24 @@ if (this.phase === 2) {
         }
     }
 
-    if (this.timer % 70 === 0) {
+    // =====================================
+    // CONTROLLED AIM BURST
+    // =====================================
+
+    if (this.timer % 110 === 0) {
 
         const angle = Math.atan2(
             this.game.player.y - this.y,
             this.game.player.x - this.x
         );
 
-        for (let i = -2; i <= 2; i++) {
+        for (let i = -1; i <= 1; i++) {
 
             const bullet = new Bullet(
                 this.x,
                 this.y,
-                angle + i * 0.12,
-                4,
+                angle + i * 0.18,
+                3,
                 true
             );
 
@@ -925,6 +938,42 @@ if (this.phase === 2) {
             bullet.height = 12;
 
             this.game.bullets.push(bullet);
+        }
+    }
+
+    // =====================================
+    // WIDE SIDE WAVES
+    // =====================================
+
+    if (this.timer % 140 === 0) {
+
+        for (let y = 120; y <= 520; y += 90) {
+
+            const left = new Bullet(
+                -10,
+                y,
+                0.1,
+                2,
+                true
+            );
+
+            left.width = 10;
+            left.height = 10;
+
+            this.game.bullets.push(left);
+
+            const right = new Bullet(
+                410,
+                y,
+                Math.PI - 0.1,
+                2,
+                true
+            );
+
+            right.width = 10;
+            right.height = 10;
+
+            this.game.bullets.push(right);
         }
     }
 }
