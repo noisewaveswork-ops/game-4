@@ -1848,23 +1848,6 @@ buildWave(waveNumber) {
 
     else if (waveNumber === 4) {
 
-        queue.push({
-            type:'mirrorNeedle',
-            enemyType:'needle',
-            x:90,
-            y:-20,
-            delay:t
-        });
-
-        queue.push({
-            type:'mirrorNeedle',
-            enemyType:'needle',
-            x:310,
-            y:-20,
-            delay:t
-        });
-
-        t += 100;
 
         queue.push({
             type:'orbitDisc',
@@ -1893,26 +1876,6 @@ buildWave(waveNumber) {
             y:-80,
             delay:t
         });
-
-        t += 320;
-
-        queue.push({
-            type:'spiralFlower',
-            enemyType:'flower',
-            x:100,
-            y:60,
-            delay:t
-        });
-
-        queue.push({
-            type:'spiralFlower',
-            enemyType:'flower',
-            x:300,
-            y:60,
-            delay:t
-        });
-
-        t += 260;
     }
 
     // =====================================
