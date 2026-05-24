@@ -297,196 +297,259 @@ class Enemy {
         if (this.pattern.update) this.pattern.update(this);
     }
 
+
     draw(ctx) {
 
     ctx.save();
 
     const t = this.timer;
 
-    // =========================
-    // OUTER ENERGY RING
-    // =========================
+    // =====================================
+    // SHADOW AURA
+    // =====================================
 
-    ctx.strokeStyle = 'rgba(255,0,40,0.35)';
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.arc(
+    const aura = ctx.createRadialGradient(
         this.x,
         this.y,
-        22 + Math.sin(t * 0.08) * 2,
-        0,
-        Math.PI * 2
-    );
-    ctx.stroke();
-
-    // =========================
-    // SHADOW GLOW
-    // =========================
-
-    const glow = ctx.createRadialGradient(
+        5,
         this.x,
         this.y,
-        4,
-        this.x,
-        this.y,
-        34
+        55
     );
 
-    glow.addColorStop(0, 'rgba(255,0,35,0.35)');
-    glow.addColorStop(1, 'rgba(255,0,35,0)');
+    aura.addColorStop(0, 'rgba(255,0,40,0.4)');
+    aura.addColorStop(1, 'rgba(255,0,40,0)');
 
-    ctx.fillStyle = glow;
+    ctx.fillStyle = aura;
 
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 34, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y, 55, 0, Math.PI * 2);
     ctx.fill();
 
-    // =========================
-    // MAIN BODY
-    // =========================
+    // =====================================
+    // OUTER ROTATING RING
+    // =====================================
 
     ctx.translate(this.x, this.y);
 
-    ctx.rotate(
-        Math.sin(t * 0.02) * 0.15
-    );
+    ctx.rotate(t * 0.015);
 
-    const bodyGrad = ctx.createLinearGradient(
-        -20,
-        -20,
-        20,
-        20
-    );
+    ctx.strokeStyle = 'rgba(255,90,110,0.4)';
+    ctx.lineWidth = 2;
 
-    bodyGrad.addColorStop(0, '#5a0d16');
-    bodyGrad.addColorStop(0.5, '#ff0023');
-    bodyGrad.addColorStop(1, '#2a0006');
-
-    ctx.fillStyle = bodyGrad;
-
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = '#ff0023';
-
-    // central hull
-    ctx.beginPath();
-
-    ctx.moveTo(0, -20);
-    ctx.lineTo(18, -6);
-    ctx.lineTo(14, 18);
-    ctx.lineTo(0, 10);
-    ctx.lineTo(-14, 18);
-    ctx.lineTo(-18, -6);
-
-    ctx.closePath();
-    ctx.fill();
-
-    // =========================
-    // SIDE WINGS
-    // =========================
-
-    ctx.fillStyle = '#2d2d38';
-
-    ctx.beginPath();
-    ctx.moveTo(-14, -4);
-    ctx.lineTo(-28, 2);
-    ctx.lineTo(-16, 10);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(14, -4);
-    ctx.lineTo(28, 2);
-    ctx.lineTo(16, 10);
-    ctx.closePath();
-    ctx.fill();
-
-    // =========================
-    // MECHANICAL DETAILS
-    // =========================
-
-    ctx.strokeStyle = '#999';
-    ctx.lineWidth = 1.5;
-
-    for (let i = -1; i <= 1; i++) {
+    for (let i = 0; i < 3; i++) {
 
         ctx.beginPath();
 
-        ctx.moveTo(i * 6, -12);
-        ctx.lineTo(i * 4, 12);
+        ctx.arc(
+            0,
+            0,
+            24 + i * 6,
+            0,
+            Math.PI * 2
+        );
 
         ctx.stroke();
     }
 
-    // =========================
-    // CORE
-    // =========================
+    ctx.rotate(-t * 0.015);
+
+    // =====================================
+    // MAIN BODY
+    // =====================================
+
+    const hull = ctx.createLinearGradient(
+        -30,
+        -30,
+        30,
+        30
+    );
+
+    hull.addColorStop(0, '#52000b');
+    hull.addColorStop(0.5, '#ff0023');
+    hull.addColorStop(1, '#1a0004');
+
+    ctx.fillStyle = hull;
+
+    ctx.shadowBlur = 24;
+    ctx.shadowColor = '#ff0023';
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, -28);
+
+    ctx.lineTo(20, -14);
+    ctx.lineTo(28, 4);
+    ctx.lineTo(16, 28);
+
+    ctx.lineTo(0, 18);
+
+    ctx.lineTo(-16, 28);
+    ctx.lineTo(-28, 4);
+    ctx.lineTo(-20, -14);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    // =====================================
+    // WINGS
+    // =====================================
+
+    ctx.fillStyle = '#23232c';
+
+    ctx.beginPath();
+    ctx.moveTo(-20, 0);
+    ctx.lineTo(-42, 10);
+    ctx.lineTo(-24, 18);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(20, 0);
+    ctx.lineTo(42, 10);
+    ctx.lineTo(24, 18);
+    ctx.closePath();
+    ctx.fill();
+
+    // =====================================
+    // MECHANICAL LINES
+    // =====================================
+
+    ctx.strokeStyle = '#aaaaaa';
+    ctx.lineWidth = 1.4;
+
+    for (let i = -2; i <= 2; i++) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(i * 5, -18);
+        ctx.lineTo(i * 3, 20);
+
+        ctx.stroke();
+    }
+
+    // =====================================
+    // CENTRAL CORE
+    // =====================================
 
     const core = ctx.createRadialGradient(
         0,
-        -2,
+        0,
         1,
         0,
         0,
-        10
+        12
     );
 
     core.addColorStop(0, '#ffffff');
-    core.addColorStop(0.3, '#ff8899');
-    core.addColorStop(1, '#ff0023');
+    core.addColorStop(0.3, '#ffcccc');
+    core.addColorStop(1, '#ff0033');
 
     ctx.fillStyle = core;
 
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 25;
     ctx.shadowColor = '#ff3355';
 
     ctx.beginPath();
-    ctx.arc(0, 0, 7, 0, Math.PI * 2);
+    ctx.arc(0, 0, 9, 0, Math.PI * 2);
     ctx.fill();
 
-    // =========================
-    // ENERGY LINES
-    // =========================
+    // =====================================
+    // SIDE ENGINES
+    // =====================================
+
+    for (let i = -1; i <= 1; i += 2) {
+
+        ctx.fillStyle = '#ff0033';
+
+        ctx.beginPath();
+
+        ctx.arc(
+            i * 18,
+            18 + Math.sin(t * 0.2 + i) * 3,
+            5,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+
+    // =====================================
+    // ENERGY STRIPES
+    // =====================================
 
     ctx.strokeStyle = '#ff3355';
     ctx.lineWidth = 2;
 
     for (let i = 0; i < 4; i++) {
 
-        const y = -12 + i * 8;
+        const y = -16 + i * 8;
 
         ctx.beginPath();
-        ctx.moveTo(-10, y);
-        ctx.lineTo(10, y);
+
+        ctx.moveTo(-12, y);
+        ctx.lineTo(12, y);
+
         ctx.stroke();
     }
 
-    // =========================
-    // HP BAR
-    // =========================
+    // =====================================
+    // MINI PARTICLES
+    // =====================================
+
+    for (let i = 0; i < 6; i++) {
+
+        const a =
+            t * 0.03 +
+            i * (Math.PI * 2 / 6);
+
+        ctx.fillStyle = '#ff5577';
+
+        ctx.beginPath();
+
+        ctx.arc(
+            Math.cos(a) * 36,
+            Math.sin(a) * 36,
+            2,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+
+    // =====================================
+    // RESET
+    // =====================================
 
     ctx.setTransform(1,0,0,1,0,0);
 
+    // =====================================
+    // HP BAR
+    // =====================================
+
     if (this.health < this.maxHealth) {
 
-        const w = 30;
+        const w = 38;
 
         ctx.fillStyle = '#220000';
 
         ctx.fillRect(
             this.x - w/2,
-            this.y - 32,
+            this.y - 42,
             w,
-            4
+            5
         );
 
         ctx.fillStyle = '#ff3355';
 
         ctx.fillRect(
             this.x - w/2,
-            this.y - 32,
+            this.y - 42,
             w * (this.health / this.maxHealth),
-            4
+            5
         );
     }
 
@@ -555,24 +618,126 @@ class Boss {
         this.xDirection = 1;
     }
 
-    // =========================================
-// ФАЗА 1 — МЯГКИЕ ВОЛНЫ
+
+        // =========================================
+// PHASE 1 — CENTER CONTROL
 // =========================================
+
 if (this.phase === 1) {
 
-    if (this.timer % 22 === 0) {
+    if (this.timer % 28 === 0) {
 
-        for (let i = 0; i < 5; i++) {
-
-            const angle =
-                Math.PI / 2 +
-                (i - 2) * 0.18;
+        for (let i = -3; i <= 3; i++) {
 
             const bullet = new Bullet(
                 this.x,
                 this.y,
-                angle,
-                1.9,
+                Math.PI / 2 + i * 0.11,
+                2.1,
+                true
+            );
+
+            bullet.width = 10;
+            bullet.height = 10;
+
+            this.game.bullets.push(bullet);
+        }
+    }
+
+    if (this.timer % 80 === 0) {
+
+        for (let i = 0; i < 2; i++) {
+
+            const side = i === 0 ? -20 : 420;
+
+            for (let y = 120; y < 520; y += 80) {
+
+                const bullet = new Bullet(
+                    side,
+                    y,
+                    i === 0 ? 0 : Math.PI,
+                    2.2,
+                    true
+                );
+
+                bullet.width = 18;
+                bullet.height = 18;
+
+                this.game.bullets.push(bullet);
+            }
+        }
+    }
+}
+
+// =========================================
+// PHASE 2 — MEMORY SPIRALS
+// =========================================
+
+if (this.phase === 2) {
+
+    if (this.timer % 5 === 0) {
+
+        const base = this.timer * 0.08;
+
+        for (let i = 0; i < 3; i++) {
+
+            const bullet = new Bullet(
+                this.x,
+                this.y,
+                base + i * (Math.PI * 2 / 3),
+                2.8,
+                true
+            );
+
+            bullet.width = 9;
+            bullet.height = 9;
+
+            this.game.bullets.push(bullet);
+        }
+    }
+
+    if (this.timer % 70 === 0) {
+
+        const angle = Math.atan2(
+            this.game.player.y - this.y,
+            this.game.player.x - this.x
+        );
+
+        for (let i = -2; i <= 2; i++) {
+
+            const bullet = new Bullet(
+                this.x,
+                this.y,
+                angle + i * 0.12,
+                4,
+                true
+            );
+
+            bullet.width = 12;
+            bullet.height = 12;
+
+            this.game.bullets.push(bullet);
+        }
+    }
+}
+
+// =========================================
+// PHASE 3 — SCREEN DOMINATION
+// =========================================
+
+if (this.phase === 3) {
+
+    if (this.timer % 3 === 0) {
+
+        const base = this.timer * 0.11;
+
+        for (let i = 0; i < 2; i++) {
+
+            const bullet = new Bullet(
+                this.x,
+                this.y,
+                base + Math.PI * i,
+                3.8,
                 true
             );
 
@@ -581,132 +746,25 @@ if (this.phase === 1) {
 
             this.game.bullets.push(bullet);
         }
-
-        this.game.sound.enemyShoot();
-    }
-}
-
-    // =========================================
-    // ФАЗА 2 — БОЛЬШИЕ ПУЛИ С КРАЕВ
-    // =========================================
-    if (this.phase === 2) {
-
-    if (this.timer % 150 === 0) {
-
-        const rows = 3;
-
-        for (let i = 0; i < rows; i++) {
-
-            const y = 140 + i * 70;
-
-            // LEFT
-            const left = new Bullet(
-                -30,
-                y,
-                0,
-                1.1,
-                true
-            );
-
-            left.width = 36;
-            left.height = 36;
-            left.color = '#ff0023';
-
-            // RIGHT
-            const right = new Bullet(
-                430,
-                y + 35,
-                Math.PI,
-                1.1,
-                true
-            );
-
-            right.width = 36;
-            right.height = 36;
-            right.color = '#ff0023';
-
-            this.game.bullets.push(left);
-            this.game.bullets.push(right);
-        }
-
-        this.game.sound.enemyShoot();
     }
 
-    // прицельные выстрелы
     if (this.timer % 90 === 0) {
 
-        const angle = Math.atan2(
-            this.game.player.y - this.y,
-            this.game.player.x - this.x
-        );
-
-        for (let i = -1; i <= 1; i++) {
-
-            this.game.bullets.push(
-                new Bullet(
-                    this.x,
-                    this.y,
-                    angle + i * 0.18,
-                    2.8,
-                    true
-                )
-            );
-        }
-    }
-}
-
-    // =========================================
-    // ФАЗА 3 — СПИРАЛЬ С ЗАМЕДЛЕНИЕМ
-    // =========================================
-    if (this.phase === 3) {
-
-    if (this.timer % 5 === 0) {
-
-        const base = this.timer * 0.16;
-
-        for (let i = 0; i < 2; i++) {
-
-            const angle = base + Math.PI * i;
+        for (let x = 40; x <= 360; x += 40) {
 
             const bullet = new Bullet(
-                this.x,
-                this.y,
-                angle,
-                3.2,
+                x,
+                -20,
+                Math.PI / 2,
+                2.5,
                 true
             );
 
-            bullet.width = 7;
-            bullet.height = 7;
+            bullet.width = 16;
+            bullet.height = 16;
 
             this.game.bullets.push(bullet);
         }
-
-        // второй слой спирали
-        if (this.timer % 9 === 0) {
-
-            for (let i = 0; i < 2; i++) {
-
-                const angle =
-                    -base * 0.8 +
-                    Math.PI * i;
-
-                const bullet = new Bullet(
-                    this.x,
-                    this.y,
-                    angle,
-                    2.4,
-                    true
-                );
-
-                bullet.width = 10;
-                bullet.height = 10;
-
-                this.game.bullets.push(bullet);
-            }
-        }
-
-        this.game.sound.enemyShoot();
     }
 }
 }
@@ -1079,280 +1137,124 @@ class Game {
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
 
-    defineWavePatterns() {
-        this.patterns = {
-
     // =====================================
-    // STREAM LEFT
-    // =====================================
+// НОВЫЕ ПАТТЕРНЫ
+// ДОБАВЬ В defineWavePatterns()
+// =====================================
 
-    streamLeft: {
+centerBloom: {
 
-        health: 6,
-        points: 250,
+    health: 12,
+    points: 800,
 
-        update: (enemy) => {
+    update: (enemy) => {
 
-            enemy.y += 0.5;
+        if (!enemy.locked) {
 
-            if (enemy.timer % 10 === 0) {
+            enemy.locked = true;
+            enemy.y = 120;
+        }
+
+        if (enemy.timer % 40 === 0) {
+
+            for (let i = 0; i < 24; i++) {
 
                 const angle =
-                    Math.PI / 2 +
-                    0.22;
+                    (Math.PI * 2 / 24) * i;
 
                 const bullet = new Bullet(
                     enemy.x,
                     enemy.y,
                     angle,
-                    2.8,
+                    2.2,
                     true
                 );
 
                 bullet.width = 8;
                 bullet.height = 8;
+                bullet.color = '#ff3355';
 
                 this.bullets.push(bullet);
             }
         }
-    },
+    }
+},
 
-    // =====================================
-    // STREAM RIGHT
-    // =====================================
+streamCenter: {
 
-    streamRight: {
+    health: 8,
+    points: 500,
 
-        health: 6,
-        points: 250,
+    update: (enemy) => {
 
-        update: (enemy) => {
+        enemy.y += 0.45;
 
-            enemy.y += 0.5;
+        if (enemy.timer % 8 === 0) {
 
-            if (enemy.timer % 10 === 0) {
-
-                const angle =
-                    Math.PI / 2 -
-                    0.22;
+            for (let i = -2; i <= 2; i++) {
 
                 const bullet = new Bullet(
                     enemy.x,
                     enemy.y,
-                    angle,
-                    2.8,
+                    Math.PI / 2 + i * 0.1,
+                    3,
                     true
                 );
 
-                bullet.width = 8;
-                bullet.height = 8;
+                bullet.width = 9;
+                bullet.height = 9;
 
                 this.bullets.push(bullet);
             }
         }
-    },
-
-    // =====================================
-    // CROSS SHOOTER
-    // =====================================
-
-    crossShooter: {
-
-        health: 8,
-        points: 400,
-
-        update: (enemy) => {
-
-            enemy.y += 0.7;
-
-            if (enemy.timer % 50 === 0) {
-
-                for (let i = 0; i < 8; i++) {
-
-                    const angle =
-                        (Math.PI * 2 / 8) * i;
-
-                    const bullet = new Bullet(
-                        enemy.x,
-                        enemy.y,
-                        angle,
-                        2.2,
-                        true
-                    );
-
-                    bullet.width = 9;
-                    bullet.height = 9;
-
-                    this.bullets.push(bullet);
-                }
-            }
-        }
-    },
-
-    // =====================================
-    // WALL LEFT
-    // =====================================
-
-    wallLeft: {
-
-        health: 12,
-        points: 600,
-
-        update: (enemy) => {
-
-            enemy.y += 0.3;
-
-            if (enemy.timer % 6 === 0) {
-
-                for (let i = 0; i < 7; i++) {
-
-                    if (i === 3) continue;
-
-                    const bullet = new Bullet(
-                        0,
-                        70 + i * 65,
-                        0,
-                        1.8,
-                        true
-                    );
-
-                    bullet.width = 18;
-                    bullet.height = 18;
-
-                    this.bullets.push(bullet);
-                }
-            }
-        }
-    },
-
-    // =====================================
-    // WALL RIGHT
-    // =====================================
-
-    wallRight: {
-
-        health: 12,
-        points: 600,
-
-        update: (enemy) => {
-
-            enemy.y += 0.3;
-
-            if (enemy.timer % 6 === 0) {
-
-                for (let i = 0; i < 7; i++) {
-
-                    if (i === 2) continue;
-
-                    const bullet = new Bullet(
-                        400,
-                        70 + i * 65,
-                        Math.PI,
-                        1.8,
-                        true
-                    );
-
-                    bullet.width = 18;
-                    bullet.height = 18;
-
-                    this.bullets.push(bullet);
-                }
-            }
-        }
-    },
-
-    // =====================================
-    // ROTATOR
-    // =====================================
-
-    rotator: {
-
-        health: 20,
-        points: 1200,
-
-        update: (enemy) => {
-
-            if (!enemy.locked) {
-
-                enemy.locked = true;
-                enemy.y = 120;
-            }
-
-            enemy.timer++;
-
-            if (enemy.timer % 4 === 0) {
-
-                const base =
-                    enemy.timer * 0.05;
-
-                for (let i = 0; i < 2; i++) {
-
-                    const bullet = new Bullet(
-                        enemy.x,
-                        enemy.y,
-                        base + Math.PI * i,
-                        2.3,
-                        true
-                    );
-
-                    bullet.width = 10;
-                    bullet.height = 10;
-
-                    this.bullets.push(bullet);
-                }
-            }
-        }
     }
-};
-    }
+},
 
-    buildWave(waveNumber) {
+    // =====================================
+// НОВЫЕ ВОЛНЫ ДЛЯ ОБУЧЕНИЯ ВЗГЛЯДУ В ЦЕНТР
+// Игрок теперь вынужден смотреть в середину поля,
+// иначе паттерны читаются слишком поздно.
+// =====================================
+
+buildWave(waveNumber) {
 
     const queue = [];
 
     // =====================================
-    // WAVE 1 — CENTRAL STREAM
+    // WAVE 1 — CENTRAL PRESSURE
+    // мягкое обучение чтению центра
     // =====================================
 
     if (waveNumber === 1) {
 
         queue.push({
-            type: 'streamLeft',
-            x: 120,
-            y: -40,
+            type: 'centerBloom',
+            x: 200,
+            y: -20,
             delay: 0
         });
 
         queue.push({
-            type: 'streamRight',
-            x: 280,
+            type: 'streamLeft',
+            x: 110,
             y: -40,
-            delay: 80
+            delay: 120
+        });
+
+        queue.push({
+            type: 'streamRight',
+            x: 290,
+            y: -40,
+            delay: 180
         });
     }
 
     // =====================================
-    // WAVE 2 — CROSS LANES
+    // WAVE 2 — SIDE TRAPS
+    // заставляет смотреть в центр заранее
     // =====================================
 
     else if (waveNumber === 2) {
-
-        for (let i = 0; i < 3; i++) {
-
-            queue.push({
-                type: 'crossShooter',
-                x: 90 + i * 110,
-                y: -40,
-                delay: i * 70
-            });
-        }
-    }
-
-    // =====================================
-    // WAVE 3 — WALL OPENINGS
-    // =====================================
-
-    else if (waveNumber === 3) {
 
         queue.push({
             type: 'wallLeft',
@@ -1365,12 +1267,43 @@ class Game {
             type: 'wallRight',
             x: 360,
             y: -40,
-            delay: 120
+            delay: 100
+        });
+
+        queue.push({
+            type: 'centerBloom',
+            x: 200,
+            y: 90,
+            delay: 220
         });
     }
 
     // =====================================
-    // WAVE 4 — ROTATION
+    // WAVE 3 — CROSS REACTION
+    // =====================================
+
+    else if (waveNumber === 3) {
+
+        for (let i = 0; i < 2; i++) {
+
+            queue.push({
+                type: 'crossShooter',
+                x: 110 + i * 180,
+                y: -40,
+                delay: i * 80
+            });
+        }
+
+        queue.push({
+            type: 'streamCenter',
+            x: 200,
+            y: -20,
+            delay: 220
+        });
+    }
+
+    // =====================================
+    // WAVE 4 — MEMORY WALL
     // =====================================
 
     else if (waveNumber === 4) {
@@ -1378,36 +1311,57 @@ class Game {
         queue.push({
             type: 'rotator',
             x: 200,
-            y: 120,
+            y: 110,
             delay: 0
+        });
+
+        queue.push({
+            type: 'wallLeft',
+            x: 30,
+            y: -20,
+            delay: 150
+        });
+
+        queue.push({
+            type: 'wallRight',
+            x: 370,
+            y: -20,
+            delay: 240
         });
     }
 
     // =====================================
-    // WAVE 5 — FINAL EXAM
+    // WAVE 5 — SCREEN CONTROL
     // =====================================
 
     else if (waveNumber === 5) {
 
         queue.push({
-            type: 'streamLeft',
-            x: 120,
-            y: -40,
+            type: 'centerBloom',
+            x: 200,
+            y: 100,
             delay: 0
-        });
-
-        queue.push({
-            type: 'streamRight',
-            x: 280,
-            y: -40,
-            delay: 40
         });
 
         queue.push({
             type: 'rotator',
             x: 200,
-            y: 120,
+            y: 130,
             delay: 160
+        });
+
+        queue.push({
+            type: 'streamLeft',
+            x: 100,
+            y: -20,
+            delay: 260
+        });
+
+        queue.push({
+            type: 'streamRight',
+            x: 300,
+            y: -20,
+            delay: 320
         });
     }
 
