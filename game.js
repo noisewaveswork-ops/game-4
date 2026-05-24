@@ -982,11 +982,20 @@ if (this.phase === 2) {
 // PHASE 3 — SCREEN DOMINATION
 // =========================================
 
+// =========================================
+// PHASE 3 — SCREEN DOMINATION
+// =========================================
+
 if (this.phase === 3) {
 
-    if (this.timer % 3 === 0) {
+    // =====================================
+    // SLOW CROSS SPIRAL
+    // =====================================
 
-        const base = this.timer * 0.11;
+    if (this.timer % 7 === 0) {
+
+        const base =
+            this.timer * 0.06;
 
         for (let i = 0; i < 2; i++) {
 
@@ -994,7 +1003,7 @@ if (this.phase === 3) {
                 this.x,
                 this.y,
                 base + Math.PI * i,
-                3.8,
+                2.7,
                 true
             );
 
@@ -1005,23 +1014,52 @@ if (this.phase === 3) {
         }
     }
 
-    if (this.timer % 90 === 0) {
+    // =====================================
+    // LIGHT RAIN
+    // =====================================
 
-        for (let x = 40; x <= 360; x += 40) {
+    if (this.timer % 120 === 0) {
+
+        for (let x = 60; x <= 340; x += 70) {
 
             const bullet = new Bullet(
                 x,
                 -20,
                 Math.PI / 2,
-                2.5,
+                2,
                 true
             );
 
-            bullet.width = 16;
-            bullet.height = 16;
+            bullet.width = 14;
+            bullet.height = 14;
 
             this.game.bullets.push(bullet);
         }
+    }
+
+    // =====================================
+    // FINAL AIMED SHOT
+    // =====================================
+
+    if (this.timer % 90 === 0) {
+
+        const angle = Math.atan2(
+            this.game.player.y - this.y,
+            this.game.player.x - this.x
+        );
+
+        const bullet = new Bullet(
+            this.x,
+            this.y,
+            angle,
+            3.2,
+            true
+        );
+
+        bullet.width = 16;
+        bullet.height = 16;
+
+        this.game.bullets.push(bullet);
     }
 }
 }
