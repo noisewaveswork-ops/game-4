@@ -791,15 +791,19 @@ class Boss {
 
 if (this.phase === 1) {
 
-    if (this.timer % 28 === 0) {
+    // =====================================
+    // CENTRAL FAN
+    // =====================================
 
-        for (let i = -3; i <= 3; i++) {
+    if (this.timer % 32 === 0) {
+
+        for (let i = -4; i <= 4; i++) {
 
             const bullet = new Bullet(
                 this.x,
                 this.y,
-                Math.PI / 2 + i * 0.11,
-                2.1,
+                Math.PI / 2 + i * 0.09,
+                2,
                 true
             );
 
@@ -810,27 +814,65 @@ if (this.phase === 1) {
         }
     }
 
-    if (this.timer % 80 === 0) {
+    // =====================================
+    // SLOW ROTATING RINGS
+    // =====================================
 
-        for (let i = 0; i < 2; i++) {
+    if (this.timer % 70 === 0) {
 
-            const side = i === 0 ? -20 : 420;
+        const base =
+            this.timer * 0.05;
 
-            for (let y = 120; y < 520; y += 80) {
+        for (let i = 0; i < 18; i++) {
 
-                const bullet = new Bullet(
-                    side,
-                    y,
-                    i === 0 ? 0 : Math.PI,
-                    2.2,
-                    true
-                );
+            const bullet = new Bullet(
+                this.x,
+                this.y,
+                base + (Math.PI * 2 / 18) * i,
+                1.8,
+                true
+            );
 
-                bullet.width = 18;
-                bullet.height = 18;
+            bullet.width = 8;
+            bullet.height = 8;
 
-                this.game.bullets.push(bullet);
-            }
+            this.game.bullets.push(bullet);
+        }
+    }
+
+    // =====================================
+    // SIDE CURTAINS
+    // =====================================
+
+    if (this.timer % 120 === 0) {
+
+        for (let y = 100; y <= 500; y += 60) {
+
+            const left = new Bullet(
+                -10,
+                y,
+                0.15,
+                2.5,
+                true
+            );
+
+            left.width = 12;
+            left.height = 12;
+
+            this.game.bullets.push(left);
+
+            const right = new Bullet(
+                410,
+                y,
+                Math.PI - 0.15,
+                2.5,
+                true
+            );
+
+            right.width = 12;
+            right.height = 12;
+
+            this.game.bullets.push(right);
         }
     }
 }
